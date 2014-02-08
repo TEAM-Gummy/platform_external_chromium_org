@@ -896,6 +896,14 @@ public class AwContents {
         }
         params.setExtraHeaders(new HashMap<String, String>());
 
+        // We need to clean the favicon bitmap when load a new url. onReceivedIcon will be
+        // called if the page have a favicon. Otherwise, the old bitmap icon will remain active
+        // if the new page doesn't provide a favicon.
+        if (mFavicon != null) {
+            mFavicon.recycle();
+        }
+        mFavicon = null;
+
         mContentViewCore.loadUrl(params);
 
         // The behavior of WebViewClassic uses the populateVisitedLinks callback in WebKit.
